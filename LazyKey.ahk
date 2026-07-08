@@ -10,6 +10,7 @@ Script := false
 }
 
 
+
 Control := false
 
 #HotIf Script
@@ -42,8 +43,10 @@ Control := false
             SC00D::return
     
     ; Second Row
-        ; q Q
-            SC010::return
+        ; q Q -> Backspace
+            *SC010::SC00E
+            
+
         ; w W
             SC011::return
         ; e E
@@ -112,6 +115,8 @@ Control := false
             SC033::return
         ; . >
             SC034::return
-        ; / ?
-            SC035::return
+
+
+        ; / ? -> Right Shift
+            *SC035::SC136
 #HotIf 
