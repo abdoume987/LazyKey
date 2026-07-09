@@ -20,7 +20,7 @@ KeyPress(normal, control){
     global Controls
 
     ; Shift
-    if ((GetKeyState("Shift", "P") || GetKeyState("SC035", "P")) && !GetKeyState("Control", "P")) {
+    if (GetKeyState("Shift", "P") && !GetKeyState("Control", "P") && !GetKeyState("Alt", "P")) {
         if(Controls){
             Send("+" . control)
         } else{
@@ -29,14 +29,48 @@ KeyPress(normal, control){
     } 
     
     ; Control
-    else if(!(GetKeyState("Shift", "P") || GetKeyState("SC035", "P")) && GetKeyState("Control", "P")){
+    else if(!GetKeyState("Shift", "P") && GetKeyState("Control", "P") && !GetKeyState("Alt", "P")){
         if(Controls){
             Send("^" . control)
         } else{
             Send("^" . normal)
         }        
     } 
+
+    ; Alt
+    else if(!GetKeyState("Shift", "P") && !GetKeyState("Control", "P") && GetKeyState("Alt", "P")){
+        if(Controls){
+            Send("!" . control)
+        } else{
+            Send("!" . normal)
+        }
+    }
     
+    ; Shift + Control
+    else if(GetKeyState("Shift", "P") && GetKeyState("Control", "P") && !GetKeyState("Alt", "P")){
+        if(Controls){
+            Send("^+" . control)
+        } else{
+            Send("^+" . normal)
+        }
+    }
+
+    ; Shift + Alt
+    else if(GetKeyState("Shift", "P") && !GetKeyState("Control", "P") && GetKeyState("Alt", "P")){
+        if(Controls){
+            Send("!+" . control)
+        } else{
+            Send("!+" . normal)
+        }
+    }
+    ; Control + Alt
+    else if(!GetKeyState("Shift", "P") && GetKeyState("Control", "P") && GetKeyState("Alt", "P")){
+        if(Controls){
+            Send("!^" . control)
+        } else{
+            Send("!^" . normal)
+        }
+    }
     ; normal
     else {
         if(Controls){
@@ -52,31 +86,31 @@ KeyPress(normal, control){
 #HotIf Script
     ; First Row
         ; ` ~
-            SC029::return
+            *SC029::return
         ; 1 !
-            SC002::return
+            *SC002::return
         ; 2 @
-            SC003::return
+            *SC003::return
         ; 3 #
-            SC004::return
+            *SC004::return
         ; 4 $
-            SC005::return
+            *SC005::return
         ; 5 %
-            SC006::return
+            *SC006::return
         ; 6 ^
-            SC007::return
+            *SC007::return
         ; 7 &
-            SC008::return
+            *SC008::return
         ; 8 *
-            SC009::return
+            *SC009::return
         ; 9 (
-            SC00A::return
+            *SC00A::return
         ; 0 )
-            SC00B::return
+            *SC00B::return
         ; - _
-            SC00C::return
+            *SC00C::return
         ; = +
-            SC00D::return
+            *SC00D::return
     
     ; Second Row
         ; q Q -> Backspace
@@ -142,27 +176,27 @@ KeyPress(normal, control){
                 KeyPress("t", "{Right}")
             }
         ; g G
-            SC022::{
+            *SC022::{
                 KeyPress("g", "{return}")
             }
         ; h H
-            SC023::{
+            *SC023::{
                 KeyPress("y", "{return}")
             }
         ; j J
-            SC024::{
+            *SC024::{
                 KeyPress("n", "{return}")
             }
         ; k K
-            SC025::{
+            *SC025::{
                 KeyPress("h", "{return}")
             }
         ; l L
-            SC026::{
+            *SC026::{
                 KeyPress("l", "{return}")
             }
         ; ; :
-            SC027::{
+            *SC027::{
                 KeyPress("o", "{return}")
             }
 
@@ -170,50 +204,46 @@ KeyPress(normal, control){
         ; ' "
             *SC028::{
                 global Controls
-                Controls := true
-            }
-            *SC028 up::{
-                global Controls
-                Controls := false
+                Controls := !Controls
             }
 
     ; Fourth Row
         ; z Z
-            SC02C::{
+            *SC02C::{
                 KeyPress("z", "{return}")
             }
         ; x X
-            SC02D::{
+            *SC02D::{
                 KeyPress("x", "{return}")
             }
         ; c C
-            SC02E::{
+            *SC02E::{
                 KeyPress("c", "{return}")
             }
         ; v V
-            SC02F::{
+            *SC02F::{
                 KeyPress("v", "{return}")
             }
         ; b B
             *SC030::return
         ; n N
-            SC031::{
+            *SC031::{
                 KeyPress("b", "{return}")
             }
         ; m M
-            SC032::{
+            *SC032::{
                 KeyPress("m", "{return}")
             }
         ; , <
-            SC033::{
+            *SC033::{
                 KeyPress("k", "{return}")
             }
         ; . >
-            SC034::{
+            *SC034::{
                 KeyPress("j", "{return}")
             }
 
 
         ; / ? -> Right Shift
-            *SC035::SC136
+            *SC035::return
 #HotIf 
