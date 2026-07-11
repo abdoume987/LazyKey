@@ -12,73 +12,34 @@ Script := true
 
 
 
-Controls := false
 
 
+LastPressTimeMap := Map()
+held := Map()
+KeyPress(PressedKey, State){
+    global LastPressTimeMap, held
+    switch State{
+        case "down":
+            CurrentPressTime := A_TickCount
+            if(CurrentPressTime - LastPressTimeMap.Get(PressedKey, 0) >= 50){
+                if(!held.Get(PressedKey, false)){
+                    Send(PressedKey)
+                }
+                else{
+                    Send("{Backspace}" . "+" . PressedKey)
+                }
+            }
+            held[PressedKey] := true
+            LastPressTimeMap[PressedKey] := CurrentPressTime
+        case "up": 
+            held[PressedKey] := false
 
-KeyPress(normal, control){
-    global Controls
 
-    ; Shift
-    if (GetKeyState("Shift", "P") && !GetKeyState("Control", "P") && !GetKeyState("Alt", "P")) {
-        if(Controls){
-            Send("+" . control)
-        } else{
-            Send("+" . normal)
-        }
-    } 
-    
-    ; Control
-    else if(!GetKeyState("Shift", "P") && GetKeyState("Control", "P") && !GetKeyState("Alt", "P")){
-        if(Controls){
-            Send("^" . control)
-        } else{
-            Send("^" . normal)
-        }        
-    } 
-
-    ; Alt
-    else if(!GetKeyState("Shift", "P") && !GetKeyState("Control", "P") && GetKeyState("Alt", "P")){
-        if(Controls){
-            Send("!" . control)
-        } else{
-            Send("!" . normal)
-        }
-    }
-    
-    ; Shift + Control
-    else if(GetKeyState("Shift", "P") && GetKeyState("Control", "P") && !GetKeyState("Alt", "P")){
-        if(Controls){
-            Send("^+" . control)
-        } else{
-            Send("^+" . normal)
-        }
     }
 
-    ; Shift + Alt
-    else if(GetKeyState("Shift", "P") && !GetKeyState("Control", "P") && GetKeyState("Alt", "P")){
-        if(Controls){
-            Send("!+" . control)
-        } else{
-            Send("!+" . normal)
-        }
-    }
-    ; Control + Alt
-    else if(!GetKeyState("Shift", "P") && GetKeyState("Control", "P") && GetKeyState("Alt", "P")){
-        if(Controls){
-            Send("!^" . control)
-        } else{
-            Send("!^" . normal)
-        }
-    }
-    ; normal
-    else {
-        if(Controls){
-            Send(control)
-        } else{
-            Send(normal)
-        }
-    }
+
+
+
 }
 
 
@@ -117,133 +78,211 @@ KeyPress(normal, control){
             *SC010::SC00E
             
 
-        ; w W
-            SC011::{
-                KeyPress("w", "{return}")
+        ; w W -> w W
+            *SC011::{
+                KeyPress("{SC011}", "down")
             }
-        ; e E
+            *SC011 up::{
+                KeyPress("{SC011}", "up")
+            }
+        ; e E 
             *SC012::{
-                KeyPress("e", "{Up}")
+                KeyPress("{SC012}", "down")
+            }
+            *SC012 up::{
+                KeyPress("{SC012}", "up")
             }
         ; r R
-            SC013::{
-                KeyPress("r", "{return}")
+            *SC013::{
+                KeyPress("{SC013}", "down")
             }
-        ; t T
-            SC014::{
-                KeyPress("f", "{return}")
+            *SC013 up::{
+                KeyPress("{SC013}", "up")
             }
-        ; y Y
-            SC015::{
-                KeyPress("q", "{return}")
+        ; t T -> f F
+            *SC014::{
+                KeyPress("{SC021}", "down")
+            }
+            *SC014 up::{
+                KeyPress("{SC021}", "up")
+            }
+        ; y Y -> q Q
+            *SC015::{
+                KeyPress("{SC010}", "down")
+            }
+            *SC015 up::{
+                KeyPress("{SC010}", "up")
             }
         ; u U
-            SC016::{
-                KeyPress("u", "{return}")
+            *SC016::{
+                KeyPress("{SC016}", "down")
+            }
+            *SC016 up::{
+                KeyPress("{SC016}", "up")
             }
         ; i I
-            SC017::{
-                KeyPress("i", "{return}")
+            *SC017::{
+                KeyPress("{SC017}", "down")
             }
-        ; o O
-            SC018::{
-                KeyPress("p", "{return}")
+            *SC017 up::{
+                KeyPress("{SC017}", "up")
             }
+        ; o O -> p P
+            *SC018::{
+                KeyPress("{SC019}", "down")
+            }
+            *SC018 up::{
+                KeyPress("{SC019}", "up")
+            }
+        
+        
         ; p P
-            SC019::return
+            *SC019::return
         ; [ {
-            SC01A::return
+            *SC01A::return
         ; ] }
-            SC01B::return
+            *SC01B::return
         ; \ |
-            SC02B::return
+            *SC02B::return
 
     ; Thrid Row
         ; a A
             *SC01E::{
-                KeyPress("a", "{Enter}")
+                KeyPress("{SC01E}", "down")
+            }
+            *SC01E up::{
+                KeyPress("{SC01E}", "up")
             }
         ; s S
             *SC01F::{
-                KeyPress("s", "{Left}")
+                KeyPress("{SC01F}", "down")
+            }
+            *SC01F up::{
+                KeyPress("{SC01F}", "up")
             }
         ; d D
             *SC020::{
-                KeyPress("d", "{SC150}")
+                KeyPress("{SC020}", "down")
             }
-        ; f F
+            *SC020 up::{
+                KeyPress("{SC020}", "up")
+            }
+        ; f F -> t T
             *SC021::{
-                KeyPress("t", "{Right}")
+                KeyPress("{SC014}", "down")
+            }
+            *SC021 up::{
+                KeyPress("{SC014}", "up")
             }
         ; g G
             *SC022::{
-                KeyPress("g", "{return}")
+                KeyPress("{SC022}", "down")
             }
-        ; h H
+            *SC022 up::{
+                KeyPress("{SC022}", "up")
+            }
+        ; h H -> y Y
             *SC023::{
-                KeyPress("y", "{return}")
+                KeyPress("{SC015}", "down")
+            }
+            *SC023 up::{
+                KeyPress("{SC015}", "up")
             }
         ; j J
             *SC024::{
-                KeyPress("n", "{return}")
+                KeyPress("{SC031}", "down")
             }
-        ; k K
+            *SC024 up::{
+                KeyPress("{SC031}", "up")
+            }
+        ; k K -> h H
             *SC025::{
-                KeyPress("h", "{return}")
+                KeyPress("{SC023}", "down")
+            }
+            *SC025 up::{
+                KeyPress("{SC023}", "up")
             }
         ; l L
             *SC026::{
-                KeyPress("l", "{return}")
+                KeyPress("{SC026}", "down")
+            }
+            *SC026 up::{
+                KeyPress("{SC026}", "up")
             }
         ; ; :
             *SC027::{
-                KeyPress("o", "{return}")
+                KeyPress("{SC018}", "down")
+            }
+            *SC027 up::{
+                KeyPress("{SC018}", "up")
             }
 
             
         ; ' "
-            *SC028::{
-                global Controls
-                Controls := !Controls
-            }
+            *SC028::return
 
     ; Fourth Row
         ; z Z
             *SC02C::{
-                KeyPress("z", "{return}")
+                KeyPress("{SC02C}", "down")
+            }
+            *SC02C up::{
+                KeyPress("{SC02C}", "up")
             }
         ; x X
             *SC02D::{
-                KeyPress("x", "{return}")
+                KeyPress("{SC02D}", "down")
+            }
+            *SC02D up::{
+                KeyPress("{SC02D}", "up")
             }
         ; c C
             *SC02E::{
-                KeyPress("c", "{return}")
+                KeyPress("{SC02E}", "down")
+            }
+            *SC02E up::{
+                KeyPress("{SC02E}", "up")
             }
         ; v V
             *SC02F::{
-                KeyPress("v", "{return}")
+                KeyPress("{SC02F}", "down")
+            }
+            *SC02F up::{
+                KeyPress("{SC02F}", "up")
             }
         ; b B
             *SC030::return
+
         ; n N
             *SC031::{
-                KeyPress("b", "{return}")
+                KeyPress("{SC030}", "down")
+            }
+            *SC031 up::{
+                KeyPress("{SC030}", "up")
             }
         ; m M
             *SC032::{
-                KeyPress("m", "{return}")
+                KeyPress("{SC032}", "down")
+            }
+            *SC032 up::{
+                KeyPress("{SC032}", "up")
             }
         ; , <
             *SC033::{
-                KeyPress("k", "{return}")
+                KeyPress("{SC025}", "down")
+            }
+            *SC033 up::{
+                KeyPress("{SC025}", "up")
             }
         ; . >
             *SC034::{
-                KeyPress("j", "{return}")
+                KeyPress("{SC024}", "down")
+            }
+            *SC034 up::{
+                KeyPress("{SC024}", "up")
             }
 
 
-        ; / ? -> Right Shift
+        ; / ?
             *SC035::return
 #HotIf 
