@@ -1,240 +1,173 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
-
-f12::KeyHistory()
+F12::KeyHistory()
 
 Script := true
 ^+F1::{
     global Script
-    Script := !Script
-    
+    Script := !Script   
 }
 
+LayerI := false
+LayerII := false
 
-
-
-
-PressTimeMap := Map()
-ReleaseTimeMap := Map()
-held := Map()
-
-
-KeyPress(PressedKey, State){
-    global PressTimeMap, ReleaseTimeMap
-    PressTimeMap[PressedKey] := A_TickCount
-    
-    
-    if(KeyWait(PressedKey)){
-        ReleaseTimeMap[PressedKey] := A_TickCount
-    }
-
-    if(ReleaseTimeMap[PressedKey] - PressTimeMap[PressedKey] >= 300){
-        Send("+{" . PressedKey . "}")
-        
+KeysFunction(Key, State, KeyI := ""){
+    if(LayerI){
+        Send(KeyI)
     } else{
-        Send("{" . PressedKey . "}")
+        if(GetKeyState("Shift","P") && !GetKeyState("LAlt","P") && !GetKeyState("LWin","P") && !GetKeyState("LControl","P")){
+            Send("+" . "{" . Key . "}")
+        } else if(!GetKeyState("Shift","P") && GetKeyState("LAlt","P") && !GetKeyState("LWin","P") && !GetKeyState("LControl","P")){
+            Send("!" . "{" . Key . "}")
+        } else if(!GetKeyState("Shift","P") && !GetKeyState("LAlt","P") && GetKeyState("LWin","P") && !GetKeyState("LControl","P")){
+            Send("#" . "{" . Key . "}")
+        } else if(!GetKeyState("Shift","P") && !GetKeyState("LAlt","P") && !GetKeyState("LWin","P") && GetKeyState("LControl","P")){
+            Send("^" . "{" . Key . "}")
+        } else if(GetKeyState("Shift","P") && GetKeyState("LAlt","P") && !GetKeyState("LWin","P") && !GetKeyState("LControl","P")){
+            Send("+!" . "{" . Key . "}")
+        } else if(GetKeyState("Shift","P") && !GetKeyState("LAlt","P") && GetKeyState("LWin","P") && !GetKeyState("LControl","P")){
+            Send("+#" . "{" . Key . "}")
+        } else if(GetKeyState("Shift","P") && !GetKeyState("LAlt","P") && !GetKeyState("LWin","P") && GetKeyState("LControl","P")){
+            Send("+^" . "{" . Key . "}")
+        } else if(!GetKeyState("Shift","P") && GetKeyState("LAlt","P") && GetKeyState("LWin","P") && !GetKeyState("LControl","P")){
+            Send("!#" . "{" . Key . "}")
+        } else if(!GetKeyState("Shift","P") && GetKeyState("LAlt","P") && !GetKeyState("LWin","P") && GetKeyState("LControl","P")){
+            Send("!^" . "{" . Key . "}")
+        } else if(!GetKeyState("Shift","P") && !GetKeyState("LAlt","P") && GetKeyState("LWin","P") && GetKeyState("LControl","P")){
+            Send("#^" . "{" . Key . "}")
+        } else{
+            Send("{" . Key . "}")
+        }
     }
 }
+
 #HotIf Script
     ; First Row
         ; ` ~
-            *SC029::return
+            *SC029::KeysFunction("SC029", "Down")
         ; 1 !
-            *SC002::return
+            *SC002::KeysFunction("SC002", "Down")
         ; 2 @
-            *SC003::return
+            *SC003::KeysFunction("SC003", "Down")
         ; 3 #
-            *SC004::return
+            *SC004::KeysFunction("SC004", "Down")
         ; 4 $
-            *SC005::return
+            *SC005::KeysFunction("SC005", "Down")
         ; 5 %
-            *SC006::return
+            *SC006::KeysFunction("SC006", "Down")
         ; 6 ^
-            *SC007::return
+            *SC007::KeysFunction("SC007", "Down")
         ; 7 &
-            *SC008::return
+            *SC008::KeysFunction("SC008", "Down")
         ; 8 *
-            *SC009::return
+            *SC009::KeysFunction("SC009", "Down")
         ; 9 (
-            *SC00A::return
+            *SC00A::KeysFunction("SC00A", "Down")
         ; 0 )
-            *SC00B::return
+            *SC00B::KeysFunction("SC00B", "Down")
         ; - _
-            *SC00C::return
+            *SC00C::KeysFunction("SC00C", "Down")
         ; = +
-            *SC00D::return
+            *SC00D::KeysFunction("SC00D", "Down")
     
-    ; Second Row
-        ; q Q -> Backspace
-            *SC010::SC00E
-            
 
-        ; w W -> w W
-            *SC011::{
-                KeyPress("{SC011}", "down")
-            }
+
+    ; Second Row
+        ; q Q
+            *SC010::KeysFunction("SC010", "Down")
+        ; w W
+            *SC011::KeysFunction("SC011", "Down")
         ; e E 
-            *SC012::{
-                KeyPress("{SC012}", "down")
-            }
+            *SC012::KeysFunction("SC012", "Down")
         ; r R
-            *SC013::{
-                KeyPress("{SC013}", "down")
-            }
-        ; t T -> f F
-            *SC014::{
-                KeyPress("{SC021}", "down")
-            }
-        ; y Y -> q Q
-            *SC015::{
-                KeyPress("{SC010}", "down")
-            }
+            *SC013::KeysFunction("SC013", "Down")
+        ; t T
+            *SC014::KeysFunction("SC014", "Down")
+        ; y Y
+            *SC015::KeysFunction("SC015", "Down")
         ; u U
-            *SC016::{
-                KeyPress("{SC016}", "down")
-            }
+            *SC016::KeysFunction("SC016", "Down")
         ; i I
-            *SC017::{
-                KeyPress("{SC017}", "down")
-            }
-        ; o O -> p P
-            *SC018::{
-                KeyPress("{SC019}", "down")
-            }
-        
-        
+            *SC017::KeysFunction("SC017", "Down")
+        ; o O
+            *SC018::KeysFunction("SC018", "Down")
         ; p P
-            *SC019::return
+            *SC019::KeysFunction("SC019", "Down")
         ; [ {
-            *SC01A::return
+            *SC01A::KeysFunction("SC01A", "Down")
         ; ] }
-            *SC01B::return
+            *SC01B::KeysFunction("SC01B", "Down")
         ; \ |
-            *SC02B::return
+            *SC02B::KeysFunction("SC02B", "Down")
+
+
 
     ; Thrid Row
         ; a A
-            *SC01E::{
-                PressTime := A_TickCount
-                
-                
-                if(KeyWait("SC01E")){
-                    ReleaseTime := A_TickCount
-                }
-
-                if(ReleaseTime - PressTime >= 300){
-                    Send("+{SC01E}")
-                    
-                } else{
-                    Send("{SC01E}")
-                }
-            }
+            *SC01E::KeysFunction("SC01E", "Down", "1")
         ; s S
-            *SC01F::{
-                PressTime := A_TickCount
-                
-                
-                if(KeyWait("SC01F")){
-                    ReleaseTime := A_TickCount
-                }
-
-                if(ReleaseTime - PressTime >= 300){
-                    Send("+{SC01F}")
-                    
-                } else{
-                    Send("{SC01F}")
-                }
-            }
+            *SC01F::KeysFunction("SC01F", "Down", "2")
         ; d D
-            *SC020::{
-                PressTime := A_TickCount
-                
-                
-                if(KeyWait("SC020")){
-                    ReleaseTime := A_TickCount
-                }
-
-                if(ReleaseTime - PressTime >= 300){
-                    Send("+{SC020}")
-                    
-                } else{
-                    Send("{SC02}")
-                }
-            }
-        ; f F -> t T
-            *SC021::{
-                KeyPress("{SC014}", "down")
-            }
+            *SC020::KeysFunction("SC020", "Down", "3")
+        ; f F
+            *SC021::KeysFunction("SC021", "Down", "4")
         ; g G
-            *SC022::{
-                KeyPress("{SC022}", "down")
-            }
-        ; h H -> y Y
-            *SC023::{
-                KeyPress("{SC015}", "down")
-            }
+            *SC022::KeysFunction("SC022", "Down", "5")
+        ; h H
+            *SC023::KeysFunction("SC023", "Down", "6")
         ; j J
-            *SC024::{
-                KeyPress("{SC031}", "down")
-            }
-        ; k K -> h H
-            *SC025::{
-                KeyPress("{SC023}", "down")
-            }
+            *SC024::KeysFunction("SC024", "Down", "7")
+        ; k K
+            *SC025::KeysFunction("SC025", "Down", "8")
         ; l L
-            *SC026::{
-                KeyPress("{SC026}", "down")
-            }
+            *SC026::KeysFunction("SC026", "Down", "9")
         ; ; :
-            *SC027::{
-                KeyPress("{SC018}", "down")
-            }
-
-            
+            *SC027::KeysFunction("SC027", "Down", "0")
         ; ' "
-            *SC028::return
+            *SC028::KeysFunction("SC028", "Down")
+
+
 
     ; Fourth Row
         ; z Z
-            *SC02C::{
-                KeyPress("{SC02C}", "down")
-            }
+            *SC02C::KeysFunction("SC02C", "Down")
         ; x X
-            *SC02D::{
-                KeyPress("{SC02D}", "down")
-            }
+            *SC02D::KeysFunction("SC02D", "Down")
         ; c C
-            *SC02E::{
-                KeyPress("{SC02E}", "down")
-            }
+            *SC02E::KeysFunction("SC02E", "Down")
         ; v V
-            *SC02F::{
-                KeyPress("{SC02F}", "down")
-            }
+            *SC02F::KeysFunction("SC02F", "Down")
         ; b B
-            *SC030::return
-
+            *SC030::KeysFunction("SC030", "Down")
         ; n N
-            *SC031::{
-                KeyPress("{SC030}", "down")
-            }
+            *SC031::KeysFunction("SC031", "Down")
         ; m M
-            *SC032::{
-                KeyPress("{SC032}", "down")
-            }
-        ; , <
-            *SC033::{
-                KeyPress("{SC025}", "down")
-            }
+            *SC032::KeysFunction("SC032", "Down")
+        ; , 
+            *SC033::KeysFunction("SC033", "Down")
         ; . >
-            *SC034::{
-                KeyPress("{SC024}", "down")
-            }
-            
-            
+            *SC034::KeysFunction("SC034", "Down")
             ; / ?
-            *SC035::return
-            
-            
-        #HotIf 
+            *SC035::KeysFunction("SC035", "Down")
 
+
+    ; Fifth Row
+        ; Left Ctrl
+        ; Left Windows
+        ; Left Alt
+        ; Space
+        ; Right Alt
+            *SC138::{
+                global LayerI
+                LayerI := true
+            }
+            *SC138 up::{
+                global LayerI
+                LayerI := false
+            }
+        ; Right Ctrl
+            *SC11D::return
+            
+
+        
+#HotIf
